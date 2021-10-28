@@ -23,5 +23,8 @@ jobs:
       - run: |
           npm version ${{ github.event.inputs.type }}
           git push --follow-tags
+      - run: git fetch
+      - run: git checkout ${{ github.event.inputs.branch }}
+      - run: git log --graph --all --oneline --decorate
       - run: git fetch origin master:${{ github.event.inputs.branch }}
       - run: git push
