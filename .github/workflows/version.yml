@@ -18,11 +18,12 @@ jobs:
       - run: |
           git config user.name 'GitHub'
           git config user.email 'noreply@github.com'
+          git config -l
       - uses: actions/setup-node@v2
       - run: |
           npm version ${{ github.event.inputs.type }}
           git push --follow-tags
-      - run: git fetch
+      - run: git fetch --all
       - run: git checkout ${{ github.event.inputs.branch }}
       - run: git log --graph --all --oneline --decorate
       - run: git merge --ff-only master
