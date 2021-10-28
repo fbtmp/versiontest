@@ -1,6 +1,6 @@
 {
   "name": "versiontest",
-  "version": "3.2.0",
+  "version": "3.3.0",
   "main": "index.js",
   "repository": "https://github.com/fbtmp/versiontest.git",
   "author": "Frieder Bluemle <frieder.bluemle@gmail.com>",
