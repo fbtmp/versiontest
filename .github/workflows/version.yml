@@ -24,4 +24,4 @@ jobs:
           npm version ${{ github.event.inputs.type }}
           git checkout ${{ github.event.inputs.branch }}
           git merge --ff-only master
-          git push --follow-tags
+          git push --all --follow-tags
