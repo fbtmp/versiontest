@@ -2,10 +2,6 @@ name: version
 on:
   workflow_dispatch:
     inputs:
-      branch:
-        description: 'Release Branch'
-        required: true
-        default: 'v1'
       type:
         description: 'Release Type'
         required: true
@@ -17,11 +13,18 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - uses: actions/setup-node@v2
-      - run: |
+      - name: Set Git user
+        run: |
           git config user.name 'GitHub'
           git config user.email 'noreply@github.com'
-          npm version ${{ github.event.inputs.type }}
-          git checkout ${{ github.event.inputs.branch }}
+      - uses: actions/setup-node@v2
+      - run: npm version ${{ github.event.inputs.type }}
+      - name: Determine release branch
+        id: var
+        run: echo ::set-output name=branch::"v$(npm pkg get version | sed 's/.\([0-9]*\).*/\1/')"
+      - name: Create or update release branch
+        run: |
+          echo "Using branch '${{ steps.var.outputs.branch }}'..."
+          git show-branch ${{ steps.var.outputs.branch }} &>/dev/null && git checkout ${{ steps.var.outputs.branch }} || git checkout -b ${{ steps.var.outputs.branch }}
           git merge --ff-only master
-          git push --all --follow-tags
+      - run: git push --all --follow-tags
