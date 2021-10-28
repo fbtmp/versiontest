@@ -24,7 +24,8 @@ jobs:
         run: echo ::set-output name=branch::"v$(npm -s run env echo '$npm_package_version' | sed 's/\([0-9]*\).*/\1/')"
       - name: Create or update release branch
         run: |
-          echo "Using branch '${{ steps.var.outputs.branch }}'..."
-          git show-branch ${{ steps.var.outputs.branch }} &>/dev/null && git checkout ${{ steps.var.outputs.branch }} || git checkout -b ${{ steps.var.outputs.branch }}
+          git show-branch $BRANCH &>/dev/null && git checkout $BRANCH || git checkout -b $BRANCH
           git merge --ff-only master
+        env:
+          BRANCH: ${{ steps.var.outputs.branch }}
       - run: git push --all --follow-tags
