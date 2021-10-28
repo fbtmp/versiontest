@@ -18,7 +18,10 @@ jobs:
           git config user.name 'GitHub'
           git config user.email 'noreply@github.com'
       - uses: actions/setup-node@v2
+      - run: npm pkg get version
       - run: npm version ${{ github.event.inputs.type }}
+      - run: npm pkg get version
+      - run: npm pkg get version | sed 's/.\([0-9]*\).*/\1/'
       - name: Determine release branch
         id: var
         run: echo ::set-output name=branch::"v$(npm pkg get version | sed 's/.\([0-9]*\).*/\1/')"
